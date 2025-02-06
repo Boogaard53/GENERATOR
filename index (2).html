@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insta Post Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #222;
+            color: white;
+            padding: 20px;
+        }
+        input, button {
+            font-size: 20px;
+            margin: 10px;
+            padding: 10px;
+        }
+        #outputCanvas {
+            display: block;
+            margin: 20px auto;
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Insta Post Generator</h1>
+    <label>Dag: <input type="number" id="day" value="1"></label>
+    <label>Winst: <input type="number" id="profit" value="50"></label>
+    <label>Start Saldo: <input type="number" id="startBalance" value="1000"></label>
+    <label>Eind Saldo: <input type="number" id="endBalance" value="1050"></label>
+    <button onclick="generatePost()">Genereer Afbeelding</button>
+    <button onclick="downloadImage()">Download</button>
+
+    <canvas id="outputCanvas" width="1080" height="1350"></canvas>
+
+    <script>
+        function generatePost() {
+            const canvas = document.getElementById("outputCanvas");
+            const ctx = canvas.getContext("2d");
+            const bg = new Image();
+            bg.src = "winst.png"; // Zorg dat deze afbeelding in dezelfde map staat
+
+            bg.onload = function() {
+                ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+
+                // Tekstinstellingen
+                ctx.fillStyle = "white";
+                ctx.font = "bold 100px Arial";
+                ctx.textAlign = "center";
+
+                // Haal inputwaarden op
+                const day = document.getElementById("day").value;
+                const profit = document.getElementById("profit").value;
+                const startBalance = document.getElementById("startBalance").value;
+                const endBalance = document.getElementById("endBalance").value;
+
+                // Tekst toevoegen
+                ctx.fillText(`DAG ${day}`, canvas.width / 2, 150);
+                ctx.font = "bold 150px Arial";
+                ctx.fillText(`WINST`, canvas.width / 2, canvas.height / 2 - 50);
+                ctx.fillText(`€${profit}`, canvas.width / 2, canvas.height / 2 + 100);
+                
+                ctx.fillStyle = "#a3791d";
+                ctx.font = "bold 80px Arial";
+                ctx.fillText(`€${startBalance}          €${endBalance}`, canvas.width / 2, canvas.height - 100);
+            };
+        }
+
+        function downloadImage() {
+            const canvas = document.getElementById("outputCanvas");
+            const link = document.createElement("a");
+            link.download = "insta_post.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        }
+    </script>
+
+</body>
+</html>
